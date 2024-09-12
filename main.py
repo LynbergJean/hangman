@@ -1,8 +1,9 @@
 import random
 
-def main():
 
-        HANGMAN = (
+
+
+HANGMAN = (
 """
 -----
 |   |
@@ -135,80 +136,62 @@ def main():
 |
 --------
 """)
-        welcome = "welcome to Hangman! You know the instructions"
-
-        print(welcome)
-        play_again = True
         
-        while play_again:
-               
-                        words = ["hangman", "chairs", "backpack", "bodywash", "clothing",
+import random
+
+def main():
+    welcome = ['Welcome to Hangman! A word will be chosen at random and',
+               'you must try to guess the word correctly letter by letter',
+               'before you run out of attempts. Good luck!']
+
+    for line in welcome:
+        print(line)
+    
+    play_again = True  # Move play_again out of the for loop
+
+    while play_again:
+        words = ["hangman", "chairs", "backpack", "bodywash", "clothing",
                  "computer", "python", "program", "glasses", "sweatshirt",
                  "sweatpants", "mattress", "friends", "clocks", "biology",
                  "algebra", "suitcase", "knives", "ninjas", "shampoo"]
-        
+
         chosen_word = random.choice(words).lower()
-        
-        player_guess = None
-
         guessed_letters = []
-        words_guessed = []
+        word_guessed = ["-"] * len(chosen_word)
 
-        for letter in chosen_word:
-                words_guessed.append("-")     
+        print(HANGMAN[0])  # Assuming HANGMAN is already defined
+        attempts = len(HANGMAN) - 1
 
-        joined_word = None
+        while attempts != 0 and "-" in word_guessed:
+            print(f"\nYou have {attempts} attempts remaining")
+            print("".join(word_guessed))
 
-        print(HANGMAN[0])
+            player_guess = input("\nPlease select a letter between A-Z\n> ").lower()
 
-        play_again = False
+            if not player_guess.isalpha() or len(player_guess) > 1 or player_guess in guessed_letters:
+                print("Invalid guess. Please try again.")
+                continue
 
-        attempts = len(len(HANGMAN) - 1)
+            guessed_letters.append(player_guess)
 
-        while attempts > 0 and "_" in words_guessed:
-                print("You have {} attempts remaining ")
-                joined_word = "".join(words_guessed)
-                print (joined_word)
+            if player_guess in chosen_word:
+                for i in range(len(chosen_word)):
+                    if player_guess == chosen_word[i]:
+                        word_guessed[i] = player_guess
+            else:
+                attempts -= 1
+                print(HANGMAN[len(HANGMAN) - attempts - 1])
 
-                try:
-                        player_guess = str(input("Please select a letter between A-Z ")).lower()
-                except:
-                         print("This is invalid. Please try again.")
-
-                         continue
-                else:
-                        if not player_guess.isalpha():
-                                print("That is not a letter. Please try again.")
-                                continue
-                        elif len(player_guess ) > 1:
-                                print("That is more than one letter. Please try again.")
-                                continue
-                        elif player_guess in guessed_letters:
-                                print("You have already guessed that letter. Please try again")
-                                continue
-                        else:
-                                pass
-                guessed_letters.append(player_guess)
-                for letter in range(len(chosen_word)):
-                        if player_guess == chosen_word[letter]:
-                                words_guessed[letter] = player_guess
-                
-                if player_guess not in chosen_word:
-                        attempts -= 1
-                        print(HANGMAN[len(HANGMAN)] - 1 - attempts)
-        if "-" not in words_guessed:
-                print(f"congratulations! {chosen_word} was the word")
+        if "-" not in word_guessed:
+            print(f"\nCongratulations! {chosen_word} was the word.")
         else:
-                print(f"Unlucky! The word was {chosen_word}")
+            print(f"\nUnlucky! The word was {chosen_word}.")
 
-        print("Would you like to play again")
-        
+        print("\nWould you like to play again?")
         response = input("> ").lower()
         if response not in ("yes", "y"):
             play_again = False
 
-                
-
-
 if __name__ == "__main__":
     main()
+
